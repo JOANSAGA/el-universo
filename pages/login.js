@@ -2,22 +2,23 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.config";
-
 import styles from "../styles/Login.module.css";
 import Link from "next/link";
+import { useToasts } from "react-toast-notifications";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookF,
   faTwitter,
   faVk,
 } from "@fortawesome/free-brands-svg-icons";
-import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [Credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
+  const { addToast } = useToasts();
 
   const { push } = useRouter();
 
@@ -37,12 +38,15 @@ const Login = () => {
         Credentials.email,
         Credentials.password
       );
+      addToast("Bienvenido", { appearance: "success" });
       push("/");
     } catch (error) {
-      // const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log("error", errorMessage);
-      window.alert(errorMessage);
+      if (error.message === "Firebase: Error (auth/invalid-email).") {
+        addToast("Email incorrecto", { appearance: "warning" });
+      }
+      if (error.message === "Firebase: Error (auth/internal-error).") {
+        addToast("Contraseña incorrecta", { appearance: "warning" });
+      }
     }
   };
 
