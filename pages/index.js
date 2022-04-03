@@ -1,15 +1,21 @@
 import { useToasts } from "react-toast-notifications";
-import styles from "../styles/Home.module.css";
+import { Fragment } from "react";
+import Navbar from "../components/Navbar";
 
-export default function Home() {
+const Index = () => {
   const { addToast } = useToasts();
-
   function RenderToast() {
     return <div>{addToast("message")}</div>;
   }
   return (
-    <div className={styles.container}>
-      <button onClick={RenderToast}>toast</button>
-    </div>
+    <Fragment>
+      <Navbar />
+      <div>
+        index
+        <br></br>
+        <button onClick={RenderToast}>toast</button>
+      </div>
+    </Fragment>
   );
-}
+};
+export default Index;

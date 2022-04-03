@@ -37,10 +37,16 @@ const Login = () => {
         auth,
         Credentials.email,
         Credentials.password
-      );
-      addToast("Bienvenido", { appearance: "success" });
-      push("/");
+      ).then((userCredential) => {
+        const user = userCredential.user;
+        addToast("Bienvenido", { appearance: "success" });
+        console.log(user);
+        push("/");
+      });
     } catch (error) {
+      if (error.message === "Firebase: Error (auth/user-not-found).") {
+        addToast("Usuario no registrado", { appearance: "warning" });
+      }
       if (error.message === "Firebase: Error (auth/invalid-email).") {
         addToast("Email incorrecto", { appearance: "warning" });
       }
