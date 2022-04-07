@@ -1,10 +1,8 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase.config";
 import { useRouter } from "next/router";
 import { useContextUser } from "../context/AuthContext";
-
-// HOOK FOR VALIDATE IF USER IS LOGGED
 
 export const useAuthUser = () => {
   const { push, pathname } = useRouter();
@@ -13,13 +11,26 @@ export const useAuthUser = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       let userLogged = user === null ? false : true;
-
       if (!userLogged) {
-        push("/login");
+        switch (pathname) {
+          case "/":
+            push("/login");
+            break;
+          case "/login":
+            push("/login");
+            break;
+          case "/register":
+            push("/register");
+            break;
+
+          default:
+            push("/login");
+            break;
+        }
         setisLogged(false);
       } else {
         setisLogged(true);
-        // IF THE USER IS LOGGED IN AND WANTS TO VISIT THE ROUTES
+        // window.alert(pathname);
         if (pathname === "/login" || pathname === "/register") {
           push("/");
         }

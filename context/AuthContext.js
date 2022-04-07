@@ -1,17 +1,27 @@
-import { createContext, useState, useContext } from "react";
+import { useContext, createContext, useState, useMemo } from "react";
 
-const Context = createContext({
-  isLogged: false,
-  setisLogged: async (theme) => null,
-});
-
-export const useContextUser = () => useContext(Context);
+export const Context = createContext(null);
 
 export const ContextAuthProvider = ({ children }) => {
   const [isLogged, setisLogged] = useState(false);
-  return (
-    <Context.Provider value={{ isLogged, setisLogged }}>
-      {children}
-    </Context.Provider>
+
+  const values = useMemo(
+    () => ({
+      isLogged,
+      setisLogged,
+    }),
+    [isLogged]
   );
+
+  return <Context.Provider value={values}>{children}</Context.Provider>;
 };
+
+export function useContextUser() {
+  const context = useContext(Context);
+  if (!context) {
+    console.error("Error deploying App Context!!!");
+  }
+  return context;
+}
+
+export default useContextUser;

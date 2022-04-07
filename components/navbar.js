@@ -1,4 +1,3 @@
-import { Fragment, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getAuth, signOut } from "firebase/auth";
@@ -26,17 +25,10 @@ const Navbar = () => {
         <Link href="/">
           <a>Home</a>
         </Link>
-        <Link href="/dashboard">
-          <a>Dashboard</a>
-        </Link>
-        {isLogged === true && (
-          <Fragment>
-            <button onClick={logout}>logout</button>
-          </Fragment>
-        )}
+        <button onClick={logout}>logout</button>
       </nav>
     </div>
   );
 };
-
+// {isLogged === true && <Fragment></Fragment>}
 export default Navbar;
